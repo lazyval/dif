@@ -1,0 +1,137 @@
+{
+  "id": "2023-03-29_05_03_44-1234567890123456789",
+  "projectId": "my-project-id",
+  "name": "my-job-name",
+  "region": "us-central1",
+  "startTime": "2023-03-29T05:03:44.123Z",
+  "endTime": "2023-03-29T05:25:11.234Z",
+  "state": "JOB_STATE_DONE",
+  "currentStateTime": "2023-03-29T05:25:11.234Z",
+  "environment": {
+    "userAgent": "Apache-Beam/2.31.0",
+    "version": "2.31.0",
+    "sdkPipelineOptions": {},
+    "tempLocation": "gs://my-bucket/tmp",
+    "tempStoragePrefix": "gs://my-bucket/tmp",
+    "machineType": "n1-standard-4",
+    "network": "projects/my-project-id/global/networks/my-network",
+    "subnetwork": "projects/my-project-id/regions/us-central1/subnetworks/my-subnetwork",
+    "additionalExperiments": ["my-experiment"],
+    "serviceAccountEmail": "my-service-account@my-project-id.iam.gserviceaccount.com",
+    "zone": "us-central1-f"
+  },
+  "jobMetadata": {
+    "sdkVersion": {
+      "version": "2.31.0",
+      "versionDisplayName": "Apache Beam SDK for Java 2.31.0"
+    },
+    "spannerDetails": {
+      "projectId": "my-project-id",
+      "instanceId": "my-spanner-instance",
+      "databaseId": "my-spanner-database",
+      "tableId": "my-spanner-table",
+      "transactionId": "my-transaction-id"
+    },
+    "jobType": "JOB_TYPE_BATCH",
+    "jobId": "2023-03-29_05_03_44-1234567890123456789",
+    "createTime": "2023-03-29T05:03:44.123Z",
+    "startTime": "2023-03-29T05:03:44.123Z",
+    "location": "us-central1",
+    "datasetId": "my-dataset",
+    "tableId": "my-table",
+    "writeDisposition": "WRITE_TRUNCATE",
+    "query": "SELECT * FROM my-source-table WHERE col1 > 100",
+    "destinationUri": "gs://my-bucket/output",
+    "labels": {
+      "department": "finance",
+      "owner": "John Smith",
+      "environment": "prod",
+      "team": "data-engineering",
+      "project": "my-project-id"
+    }
+  },
+  "currentState": {
+    "time": "2023-03-29T05:25:11.234Z",
+    "status": {
+      "state": "JOB_STATE_DONE",
+      "report": {},
+      "reportedProgress": {}
+    },
+    "metrics": {
+      "metrics": [
+        {
+          "name": "my-metric-name",
+          "kind": "GAUGE",
+          "type": "INTEGER",
+          "value": "123"
+        }
+      ],
+      "structuredMetrics": {}
+    },
+    "workerMessages": {}
+  },
+  "jobExecutionInfo": {
+    "stages": [
+      {
+        "name": "ReadFromBQ/Read",
+        "id": "ReadFromBQ/Read",
+        "kind": "SOURCE",
+        "startTime": "2023-03-29T05:03:45.234Z",
+        "endTime": "2023-03-29T05:05:10.345Z",
+        "state": "JOB_STATE_DONE",
+        "currentStateTime": "2023-03-29T05:05:10.345Z",
+        "progress": {
+          "percentComplete": 100.0,
+          "dataflowMetrics": {},
+          "workerMetrics": {},
+          "details": "ReadFromBQ/Read.out:1000000 records."
+        },
+        "properties": {
+          "elementCount": "1000000",
+          "readTime": "84568",
+          "meanByteRate": "23.45 MB/sec"
+        }
+      },
+      {
+        "name": "Process",
+        "id": "Process",
+        "kind": "TRANSFORM",
+        "startTime": "2023-03-29T05:05:10.345Z",
+        "endTime": "2023-03-29T05:10:15.123Z",
+        "state": "JOB_STATE_DONE",
+        "currentStateTime": "2023-03-29T05:10:15.123Z",
+        "progress": {
+          "percentComplete": 100.0,
+          "dataflowMetrics": {},
+          "workerMetrics": {},
+          "details": "Process.out:1000000 records."
+        },
+        "properties": {
+          "elementCount": "1000000",
+          "computeTime": "302478",
+          "meanByteRate": "9.34 MB/sec"
+        }
+      },
+      {
+        "name": "WriteToGCS/Write",
+        "id": "WriteToGCS/Write",
+        "kind": "SINK",
+        "startTime": "2023-03-29T05:10:15.123Z",
+        "endTime": "2023-03-29T05:25:11.234Z",
+        "state": "JOB_STATE_DONE",
+        "currentStateTime": "2023-03-29T05:25:11.234Z",
+        "progress": {
+          "percentComplete": 100.0,
+          "dataflowMetrics": {},
+          "workerMetrics": {},
+          "details": "WriteToGCS/Write.out:1000000 records."
+        },
+        "properties": {
+          "elementCount": "1000000",
+          "writeTime": "84568",
+          "meanByteRate": "23.45 MB/sec"
+        }
+      }
+    ]
+  }
+}
