@@ -4,8 +4,11 @@
   "name": "my-job-name",
   "region": "us-central1",
   "startTime": "2023-03-29T05:03:44.123Z",
+  "createTime": "2023-03-29T05:03:44.123Z",
   "endTime": "2023-03-29T05:25:11.234Z",
   "state": "JOB_STATE_DONE",
+  "type": "JOB_TYPE_BATCH",
+  "location": "eu-west1",
   "currentStateTime": "2023-03-29T05:25:11.234Z",
   "environment": {
     "userAgent": "Apache-Beam/2.31.0",
@@ -50,26 +53,8 @@
       "project": "my-project-id"
     }
   },
-  "currentState": {
-    "time": "2023-03-29T05:25:11.234Z",
-    "status": {
-      "state": "JOB_STATE_DONE",
-      "report": {},
-      "reportedProgress": {}
-    },
-    "metrics": {
-      "metrics": [
-        {
-          "name": "my-metric-name",
-          "kind": "GAUGE",
-          "type": "INTEGER",
-          "value": "123"
-        }
-      ],
-      "structuredMetrics": {}
-    },
-    "workerMessages": {}
-  },
+  "currentState": "JOB_STATE_DONE",
+  "requestedState": "JOB_STATE_DONE",
   "jobExecutionInfo": {
     "stages": [
       {
