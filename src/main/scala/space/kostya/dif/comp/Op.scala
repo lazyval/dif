@@ -1,0 +1,42 @@
+package space.kostya.dif.comp
+
+import io.circe.{Decoder, Json}
+import io.circe.generic.semiauto.deriveDecoder
+
+// operations from https://tools.ietf.org/html/rfc6902
+// slimmer version of diffson operations
+sealed trait Op
+case class Replace(path: String, value: String) extends Op
+case class Add(path: String, value: Json)       extends Op
+case class Remove(path: String)                 extends Op
+case class Move(from: String, path: String)     extends Op
+case class Copy(from: String, path: String)     extends Op
+case class Test(path: String, value: Json)      extends Op
+given diffsonConversion: Conversion[diffson.jsonpatch.Operation[Json], Op] = {
+  case diffson.jsonpatch.Replace(path, value, old) => Replace(path.toString, value.toString)
+  case diffson.jsonpatch.Add(path, value)          => Add(path.toString, value)
+  case diffson.jsonpatch.Remove(path, old)         => Remove(path.toString)
+  case diffson.jsonpatch.Move(from, path)          => Move(from.toString, path.toString)
+  case diffson.jsonpatch.Copy(from, path)          => Copy(from.toString, path.toString)
+  case diffson.jsonpatch.Test(path, value)         => Test(path.toString, value)
+}
+
+given opDecoder: Decoder[Op] = (c: io.circe.HCursor) => {
+  val op = c.downField("op").as[String].getOrElse("")
+  op match {
+    case "replace" => c.as[Replace]
+    case "add"     => c.as[Add]
+    case "remove"  => c.as[Remove]
+    case "move"    => c.as[Move]
+    case "copy"    => c.as[Copy]
+    case "test"    => c.as[Test]
+    case _         => Left(io.circe.DecodingFailure("Unknown op", c.history))
+  }
+}
+
+inline given ReplaceDecoder: Decoder[Replace] = deriveDecoder[Replace]
+inline given AddDecoder: Decoder[Add]         = deriveDecoder[Add]
+inline given RemoveDecoder: Decoder[Remove]   = deriveDecoder[Remove]
+inline given MoveDecoder: Decoder[Move]       = deriveDecoder[Move]
+inline given CopyDecoder: Decoder[Copy]       = deriveDecoder[Copy]
+inline given TestDecoder: Decoder[Test]       = deriveDecoder[Test]
