@@ -11,8 +11,8 @@ import scala.util.Try
 // spent too much time on this, trying to fix propagation of credentials
 // will switch over to process based wrapper over gcloud cli for now
 class GcpClient(projectId: String) extends Api {
-  override def listJobs(): Try[List[JobSummary]]          = ???
-  override def describeJob(jobId: String): JobDescription = ???
+  override def listJobs(): Try[List[JobSummary]]               = ???
+  override def describeJob(jobId: String): Try[JobDescription] = ???
 }
 
 given Conversion[Job, JobSummary] with {

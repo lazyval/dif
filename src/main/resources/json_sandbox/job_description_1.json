@@ -1,6 +1,7 @@
 {
   "currentStateTime": "2022-12-15T12:34:56Z",
   "createTime": "2022-12-15T12:34:56Z",
+  "startTime": "2022-12-15T12:34:56Z",
   "currentState": "JOB_STATE_DONE",
   "location": "us-central1",
   "id": "<JOB_ID>",

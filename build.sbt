@@ -14,6 +14,9 @@ lazy val root = project
       "io.circe" %% "circe-core" % CirceVersion,
       "io.circe" %% "circe-generic" % CirceVersion,
       "io.circe" %% "circe-parser" % CirceVersion,
-      "org.scalameta" %% "munit" % "0.7.29" % Test
+
+      "org.scalatest" %% "scalatest" % "3.2.10" % Test,
+      "org.scalactic" %% "scalactic" % "3.2.10" % Test,
+      "org.scalacheck" %% "scalacheck" % "1.15.4" % Test
     )
   )
