@@ -10,7 +10,7 @@ import java.time.format.DateTimeFormatter
 import scala.util.{Failure, Success, Try}
 
 open class Sandbox(resourceDir: String) extends Api {
-  given localDtDecoder: Decoder[LocalDateTime] = Decoder.decodeString.emapTry { str =>
+  given Decoder[LocalDateTime] = Decoder.decodeString.emapTry { str =>
     // dataflow time is decoded with 'Z' in the end => OffsetDateTime
     Try(OffsetDateTime.parse(str).toLocalDateTime)
   }
