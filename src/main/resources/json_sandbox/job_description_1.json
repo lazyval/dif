@@ -1,0 +1,51 @@
+{
+  "currentStateTime": "2022-12-15T12:34:56Z",
+  "createTime": "2022-12-15T12:34:56Z",
+  "currentState": "JOB_STATE_DONE",
+  "location": "us-central1",
+  "id": "<JOB_ID>",
+  "name": "my-batch-dataflow-job",
+  "projectId": "my-project",
+  "steps": [
+    {
+      "id": "s1",
+      "name": "Read from TextIO",
+      "kind": "BATCH"
+    },
+    {
+      "id": "s2",
+      "name": "Process Data",
+      "kind": "BATCH"
+    },
+    {
+      "id": "s3",
+      "name": "Write to BigQuery",
+      "kind": "BATCH"
+    }
+  ],
+  "environment": {
+    "userAgent": {
+      "version": "DataflowRunner/2.34.0",
+      "name": "Apache Beam SDK for Java"
+    },
+    "tempLocation": "gs://my-bucket/tmp",
+    "zone": "us-central1-f",
+    "serviceAccountEmail": "my-service-account@my-project.iam.gserviceaccount.com"
+  },
+  "type": "JOB_TYPE_BATCH",
+  "jobMetadata": {
+    "sdkVersion": "java:2.34.0",
+    "jobId": "2022-12-15_05_34_56-1234567890123456789",
+    "startTime": "2022-12-15T12:34:56.789Z",
+    "endTime": "2022-12-15T12:36:34.123Z",
+    "projectId": "my-project",
+    "jobName": "my-batch-dataflow-job",
+    "currentStateTime": "2022-12-15T12:36:34.123Z"
+  },
+  "currentStateTimeMs": "1234567890000",
+  "replacedByJobId": "",
+  "replacedJobId": "",
+  "currentStateTimeNs": "1234567890123456789",
+  "requestedState": "JOB_STATE_DONE"
+}
+

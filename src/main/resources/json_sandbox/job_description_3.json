@@ -1,0 +1,54 @@
+{
+  "createTime": "2022-08-15T08:07:42Z",
+  "currentState": "JOB_STATE_DONE",
+  "currentStateTime": "2022-08-15T08:12:18Z",
+  "environment": {
+    "tempLocation": "gs://my-bucket/tmp",
+    "zone": "us-central1-a",
+    "sdkPipelineOptions": {
+      "options": {
+        "project": "my-project",
+        "region": "us-central1",
+        "runner": "DataflowRunner"
+      }
+    },
+    "workerRegion": "us-central1"
+  },
+  "id": "2022-08-15_01_07_41-1234567890123456789",
+  "jobMetadata": {
+    "projectId": "my-project",
+    "startTime": "2022-08-15T08:07:42.132Z",
+    "endTime": "2022-08-15T08:12:18.416Z",
+    "jobId": "2022-08-15_01_07_41-1234567890123456789",
+    "jobName": "my-dataflow-batch-job",
+    "sdkVersion": "2.39.0",
+    "type": "JOB_TYPE_BATCH"
+  },
+  "labels": {
+    "owner": "johndoe",
+    "priority": "high"
+  },
+  "location": "us-central1",
+  "name": "my-dataflow-batch-job",
+  "projectId": "my-project",
+  "requestedState": "JOB_STATE_DONE",
+  "startTime": "2022-08-15T08:07:42.215Z",
+  "steps": [
+    {
+      "id": "s3",
+      "kind": "ParallelWrite",
+      "name": "WriteToBigQuery"
+    },
+    {
+      "id": "s1",
+      "kind": "ParallelRead",
+      "name": "ReadFromGCS/Read/CreateSource/Read(CreateSource)"
+    },
+    {
+      "id": "s2",
+      "kind": "ParallelDo",
+      "name": "ProcessData"
+    }
+  ],
+  "type": "JOB_TYPE_BATCH"
+}

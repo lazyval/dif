@@ -1,0 +1,106 @@
+{
+  "createTime": "2023-03-29T12:00:00Z",
+  "currentState": "JOB_STATE_DONE",
+  "currentStateTime": "2023-03-29T12:05:30Z",
+  "environment": {
+    "tempLocation": "gs://my-bucket/tmp",
+    "zone": "us-central1-f",
+    "sdkPipelineOptions": {
+      "options": {
+        "project": "my-project",
+        "region": "us-central1",
+        "runner": "DataflowRunner",
+        "job_name": "my-dataflow-batch-job",
+        "max_num_workers": "100",
+        "disk_size_gb": "500",
+        "machine_type": "n1-standard-8",
+        "network": "my-vpc",
+        "subnetwork": "my-subnet",
+        "num_workers": "50",
+        "autoscaling_algorithm": "THROUGHPUT_BASED"
+      }
+    },
+    "workerRegion": "us-central1"
+  },
+  "id": "2023-03-29_12_00_00-1234567890123456789",
+  "jobMetadata": {
+    "projectId": "my-project",
+    "startTime": "2023-03-29T12:00:00.132Z",
+    "endTime": "2023-03-29T12:05:30.416Z",
+    "jobId": "2023-03-29_12_00_00-1234567890123456789",
+    "jobName": "my-dataflow-batch-job",
+    "sdkVersion": "2.39.0",
+    "type": "JOB_TYPE_BATCH"
+  },
+  "labels": {
+    "owner": "jane_doe",
+    "priority": "high",
+    "dataflow_version": "2.39.0",
+    "env": "production"
+  },
+  "location": "us-central1",
+  "name": "my-dataflow-batch-job",
+  "projectId": "my-project",
+  "requestedState": "JOB_STATE_DONE",
+  "startTime": "2023-03-29T12:00:00.215Z",
+  "steps": [
+    {
+      "id": "s1",
+      "kind": "ParallelRead",
+      "name": "ReadFromGCS",
+      "properties": {
+        "pattern": "gs://my-bucket/input/*.csv",
+        "compression": "AUTO",
+        "header": "true",
+        "quote": "\"",
+        "delimiter": ",",
+        "skipHeaderLines": "1"
+      }
+    },
+    {
+      "id": "s2",
+      "kind": "ParallelDo",
+      "name": "ProcessData",
+      "properties": {
+        "functionName": "my_function",
+        "inputCoder": {
+          "kind": "Utf8Coder"
+        },
+        "outputCoder": {
+          "kind": "BigEndianIntegerCoder"
+        }
+      }
+    },
+    {
+      "id": "s3",
+      "kind": "ParallelWrite",
+      "name": "WriteToBigQuery",
+      "properties": {
+        "table": "my_dataset.my_table",
+        "writeDisposition": "WRITE_TRUNCATE",
+        "createDisposition": "CREATE_IF_NEEDED",
+        "schema": {
+          "fields": [
+            {
+              "name": "col1",
+              "type": "STRING",
+              "mode": "NULLABLE"
+            },
+            {   "name": "col2",
+              "type": "INTEGER",
+              "mode": "NULLABLE"
+            },
+            {
+              "name": "col3",
+              "type": "TIMESTAMP",
+              "mode": "NULLABLE"
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "type": "JOB_TYPE_BATCH",
+  "updateTime": "2023-03-29T12:05:30.568Z",
+  "version": "v1b3"
+}
