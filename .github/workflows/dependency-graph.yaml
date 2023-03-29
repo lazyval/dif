@@ -5,6 +5,10 @@ on:
     branches:
       - main # default branch of the project
 
+# https://github.com/marketplace/actions/sbt-dependency-submission#unexpected-status-403
+permissions:
+  contents: write
+
 jobs:
   update-graph:
     name: Update Dependency Graph
@@ -12,7 +16,3 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: scalacenter/sbt-dependency-submission@v2
-        with:
-          ## Optional: Define the working directory of your build.
-          ## It should contain the build.sbt file.
-          working-directory: './'

@@ -11,7 +11,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Run Scala Steward
-        uses: scala-steward-org/scala-steward-action@v2.8.3
+        uses: scala-steward-org/scala-steward-action@v2.51.0
         with:
           # Specify the path to your .scala-steward.conf file
           config-path: .github/.scala-steward.conf
