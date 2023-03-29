@@ -1,0 +1,27 @@
+name: Weekly Scala Steward
+
+on:
+  schedule:
+    - cron: '0 0 * * 0' # Run at midnight UTC every Sunday
+  workflow_dispatch: # Manually trigger the workflow
+
+jobs:
+  scala-steward:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Run Scala Steward
+        uses: scala-steward-org/scala-steward-action@v2.8.3
+        with:
+          # Specify the path to your .scala-steward.conf file
+          config-path: .github/.scala-steward.conf
+          # Token for accessing the GitHub API
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          # Set this to true to enable automatic merging of pull requests
+          auto-merge: false
+          # Set this to true to enable automatic rebasing of pull requests
+          auto-rebase: true
+          # Set this to true to enable automatic closing of pull requests
+          auto-approve: false
+          # Set this to true to enable automatic deletion of branches
+          delete-branch: false
