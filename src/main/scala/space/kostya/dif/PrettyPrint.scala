@@ -3,7 +3,35 @@ package space.kostya.dif
 import space.kostya.dif.comp._
 
 trait PrettyPrint {
-  def format(firstId: String, secondId: String, diffs: List[Op]): List[String] = ???
+  def format(firstId: String, secondId: String, diffs: List[Op]): List[String]
+}
+
+object PlainText extends PrettyPrint {
+  override def format(firstId: String, secondId: String, diffs: List[Op]): List[String] = {
+    val header = List(s"--- $firstId", s"+++ $secondId")
+    val lines  = diffs.map(_.toString)
+    header ++ lines
+  }
+}
+
+object Markdown extends PrettyPrint {
+  override def format(firstId: String, secondId: String, diffs: List[Op]): List[String] = {
+    val header = List(s"--- $firstId", s"+++ $secondId")
+    val lines  = diffs.map(_.toString)
+    header ++ lines
+  }
+}
+
+object GitLike extends PrettyPrint {
+  override def format(firstId: String, secondId: String, diffs: List[Op]): List[String] = {
+    ???
+  }
+}
+
+object Tablify extends PrettyPrint {
+  override def format(firstId: String, secondId: String, diffs: List[Op]): List[String] = {
+    ???
+  }
 }
 
 object ColorfulTree extends PrettyPrint {
