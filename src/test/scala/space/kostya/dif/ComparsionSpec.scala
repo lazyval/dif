@@ -32,8 +32,8 @@ class ComparsionSpec extends AnyFlatSpec with Matchers {
 
     jobSummaryComparison.vs(x, y) shouldBe (
       List(
-        Replace("/name", "zzz"),
-        Replace("/currentState", "FAILED")
+        Replace("/name", "zzz", "yyy"),
+        Replace("/currentState", "FAILED", "FINISHED")
       )
     )
   }
@@ -53,7 +53,7 @@ class ComparsionSpec extends AnyFlatSpec with Matchers {
 
     jobSummaryComparison.vs(x, y) shouldBe (
       List(
-        Replace("/id", replacement)
+        Replace("/id", replacement, original)
       )
     )
   }

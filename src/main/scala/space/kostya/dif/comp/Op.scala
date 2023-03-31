@@ -5,20 +5,24 @@ import io.circe.generic.semiauto.deriveDecoder
 
 // operations from https://tools.ietf.org/html/rfc6902
 // slimmer version of diffson operations
-sealed trait Op
-case class Replace(path: String, value: String) extends Op
-case class Add(path: String, value: Json)       extends Op
-case class Remove(path: String)                 extends Op
-case class Move(from: String, path: String)     extends Op
-case class Copy(from: String, path: String)     extends Op
-case class Test(path: String, value: Json)      extends Op
+sealed trait Op { def path: String }
+case class Replace(path: String, value: String, old: String) extends Op
+case class Add(path: String, value: String)                  extends Op
+case class Remove(path: String, old: String)                 extends Op
+case class Move(from: String, path: String)                  extends Op
+case class Copy(from: String, path: String)                  extends Op
+case class Test(path: String, value: Json)                   extends Op
 given diffsonConversion: Conversion[diffson.jsonpatch.Operation[Json], Op] = {
-  case diffson.jsonpatch.Replace(path, value, old) => Replace(path.toString, value.toString)
-  case diffson.jsonpatch.Add(path, value)          => Add(path.toString, value)
-  case diffson.jsonpatch.Remove(path, old)         => Remove(path.toString)
-  case diffson.jsonpatch.Move(from, path)          => Move(from.toString, path.toString)
-  case diffson.jsonpatch.Copy(from, path)          => Copy(from.toString, path.toString)
-  case diffson.jsonpatch.Test(path, value)         => Test(path.toString, value)
+  case diffson.jsonpatch.Replace(path, value, old) =>
+    val original = old.map(_.toString).getOrElse("")
+    Replace(path.toString, value.toString, original)
+  case diffson.jsonpatch.Add(path, value) => Add(path.toString, value.toString)
+  case diffson.jsonpatch.Remove(path, old) =>
+    val original = old.map(_.toString).getOrElse("")
+    Remove(path.toString, original)
+  case diffson.jsonpatch.Move(from, path)  => Move(from.toString, path.toString)
+  case diffson.jsonpatch.Copy(from, path)  => Copy(from.toString, path.toString)
+  case diffson.jsonpatch.Test(path, value) => Test(path.toString, value)
 }
 
 given opDecoder: Decoder[Op] = (c: io.circe.HCursor) => {

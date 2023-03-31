@@ -21,7 +21,7 @@ object Differ {
   given Lcs[Json] = new Patience[Json]()
 
   given circeDiffer: Diff[Json, JsonPatch[Json]] =
-    new JsonDiff[Json](diffArray = true, rememberOld = false)
+    new JsonDiff[Json](diffArray = true, rememberOld = true)
 
   given jobSummaryComparison: Comparison[JobSummary] = new Comparison[JobSummary] {
 
