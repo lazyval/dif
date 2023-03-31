@@ -7,7 +7,7 @@ import io.circe.generic.semiauto.deriveDecoder
 // slimmer version of diffson operations
 sealed trait Op { def path: String }
 case class Replace(path: String, value: String, old: String) extends Op
-case class Add(path: String, value: Json)                    extends Op
+case class Add(path: String, value: String)                  extends Op
 case class Remove(path: String, old: String)                 extends Op
 case class Move(from: String, path: String)                  extends Op
 case class Copy(from: String, path: String)                  extends Op
@@ -16,7 +16,7 @@ given diffsonConversion: Conversion[diffson.jsonpatch.Operation[Json], Op] = {
   case diffson.jsonpatch.Replace(path, value, old) =>
     val original = old.map(_.toString).getOrElse("")
     Replace(path.toString, value.toString, original)
-  case diffson.jsonpatch.Add(path, value) => Add(path.toString, value)
+  case diffson.jsonpatch.Add(path, value) => Add(path.toString, value.toString)
   case diffson.jsonpatch.Remove(path, old) =>
     val original = old.map(_.toString).getOrElse("")
     Remove(path.toString, original)
