@@ -5,9 +5,12 @@ import io.circe.{Decoder, DecodingFailure, HCursor}
 import space.kostya.dif.model.{JobDescription, JobSummary}
 
 import java.io.FileNotFoundException
+import java.nio.file.Path
+import java.nio.file.Files
 import java.time.{LocalDateTime, OffsetDateTime}
 import java.time.format.DateTimeFormatter
 import scala.util.{Failure, Success, Try}
+import scala.jdk.CollectionConverters.*
 
 open class Sandbox(resourceDir: String) extends Api {
   given Decoder[LocalDateTime] = Decoder.decodeString.emapTry { str =>
@@ -37,19 +40,31 @@ open class Sandbox(resourceDir: String) extends Api {
     }
   }
 
-  private def resources(prefix: String): List[java.io.File] = {
-    val url   = getClass.getClassLoader.getResource(resourceDir)
-    val files = new java.io.File(url.toURI).listFiles
-    files.filter(_.isFile).filter(_.getName.startsWith(prefix)).toList
+  private def resources(prefix: String): List[Path] = {
+    val uri = getClass.getClassLoader.getResource(resourceDir).toURI
+    val path = if (uri.getScheme.equals("jar")) {
+      val fs =
+        try {
+          java.nio.file.FileSystems.getFileSystem(uri)
+        } catch {
+          case _: java.nio.file.FileSystemNotFoundException =>
+            java.nio.file.FileSystems.newFileSystem(uri, Map.empty[String, String].asJava)
+        }
+      fs.getPath(resourceDir)
+    } else {
+      java.nio.file.Paths.get(uri)
+    }
+    val iterator = Files.walk(path).iterator().asScala
+    val jsons    = iterator.filter(_.getFileName.toString.endsWith(".json"))
+    jsons.filter(_.getFileName.toString.startsWith(prefix)).toList
   }
 
   @throws[io.circe.DecodingFailure]("if job json is invalid")
   @throws[FileNotFoundException]("when directory is located, but individual file is not")
   @throws[RuntimeException](s"if files cannot be located at $resourceDir")
   private def readJobs(): List[JobDescription] = {
-    resources(prefix = "job_description_").flatMap { file =>
-      val path = s"$resourceDir/${file.getName}"
-      val json = scala.io.Source.fromResource(path).mkString
+    resources(prefix = "job_description_").flatMap { path =>
+      val json = Files.lines(path).iterator().asScala.mkString
       import io.circe.generic.auto._
       import io.circe.parser._
 
