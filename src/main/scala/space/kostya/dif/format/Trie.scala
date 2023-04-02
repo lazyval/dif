@@ -24,6 +24,12 @@ object Trie {
   def merge(left: Trie, right: Trie, prev: Trie = Empty): Trie = (left, right) match {
     case (Empty, other) => other
     case (other, Empty) => merge(Empty, other, prev)
+    case (Leaf(x, op), Leaf(y, _)) =>
+      if (x == y) {
+        throw new IllegalStateException(s"Leaf $left cannot share key with $right")
+      } else {
+        Node(prev.token, List(left, right))
+      }
     case (Leaf(x, op), Node(key, _)) =>
       if (x == key) {
         throw new IllegalStateException(s"Leaf $left cannot share key with non-leaf $right")

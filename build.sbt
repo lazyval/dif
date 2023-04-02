@@ -20,6 +20,7 @@ lazy val root = project
       // but sadly it doesn't work with scala 3 yet, see https://github.com/spotify/magnolify/pull/676
       // "com.spotify"     %% "magnolify-scalacheck"  % "0.22.0",
       "org.gnieh"      %% "diffson-circe" % "4.4.0",
+      "org.jline"        % "jline"        % "3.23.0",
       "org.scalacheck" %% "scalacheck"    % "1.17.0" % Test
     )
   )

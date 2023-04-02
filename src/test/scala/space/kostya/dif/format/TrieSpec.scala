@@ -135,4 +135,27 @@ class TrieSpec extends AnyFlatSpec with Matchers {
     initial should equal(Trie.Empty)
     res should equal(expectation)
   }
+
+  it should "correctly join multiple values when they are on the very first level" in {
+    val initial = Trie.empty
+    val first   = Replace("/name", "<none>", "<none>")
+    val second  = Replace("/id", "<none>", "<none>")
+
+    val firstRes  = Trie.fromPath(first.path, first)
+    val secondRes = Trie.fromPath(second.path, second)
+    val res       = Trie.merge(firstRes, secondRes)
+
+    val expectation: Trie = {
+      Node(
+        "/",
+        children = List(
+          Trie.fromPath("/name", first),
+          Trie.fromPath("/id", second)
+        )
+      )
+    }
+
+    initial should equal(Trie.Empty)
+    res should equal(expectation)
+  }
 }

@@ -12,7 +12,6 @@ case class JobDescription(
     startTime: LocalDateTime,
     endTime: Option[LocalDateTime],
     currentState: String,
-    requestedState: String,
     // wrapping labels into option, otherwise circe gets confused
     // when labels is not defined in the json
     labels: Option[Map[String, String]]

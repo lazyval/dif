@@ -5,16 +5,19 @@ import org.scalacheck.Arbitrary
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 import space.kostya.dif.model.JobSummary
-import space.kostya.dif.comp._
+import space.kostya.dif.comp.*
+import java.time.LocalDateTime
 
 class ComparsionSpec extends AnyFlatSpec with Matchers {
   import Differ.jobSummaryComparison
+  val Yesterday = LocalDateTime.now().minusDays(1)
   "comparison" should "return empty list on identical classes" in {
     val randomSummary: JobSummary = JobSummary(
       id = "xxx",
       name = "yyy",
       `type` = "BATCH",
       currentState = "FINISHED",
+      createTime = Yesterday,
       projectId = "sandbox"
     )
 
@@ -26,6 +29,7 @@ class ComparsionSpec extends AnyFlatSpec with Matchers {
       name = "yyy",
       `type` = "BATCH",
       currentState = "FINISHED",
+      createTime = Yesterday,
       projectId = "sandbox"
     )
     val y: JobSummary = x.copy(name = "zzz", currentState = "FAILED")
@@ -47,6 +51,7 @@ class ComparsionSpec extends AnyFlatSpec with Matchers {
       name = "yyy",
       `type` = "BATCH",
       currentState = "FINISHED",
+      createTime = Yesterday,
       projectId = "sandbox"
     )
     val y: JobSummary = x.copy(id = replacement)
