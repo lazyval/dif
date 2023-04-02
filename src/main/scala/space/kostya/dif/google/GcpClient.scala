@@ -1,9 +1,11 @@
 package space.kostya.dif.google
 
 import com.google.dataflow.v1beta3.{Environment, Job}
+import org.threeten.bp.ZoneId
 import space.kostya.dif.Api
 import space.kostya.dif.model.{JobDescription, JobEnvironment, JobSummary}
 
+import java.time
 import java.time.LocalDateTime
 import scala.util.Try
 
@@ -17,12 +19,18 @@ class GcpClient(projectId: String) extends Api {
 
 given Conversion[Job, JobSummary] with {
   def apply(job: Job): JobSummary = {
+    val createTime: LocalDateTime = {
+      val secs = job.getCreateTime.getSeconds
+      LocalDateTime.ofEpochSecond(secs, job.getCreateTime.getNanos, time.ZoneOffset.UTC)
+    }
+
     JobSummary(
       id = job.getId,
       name = job.getName,
       projectId = job.getProjectId,
       `type` = job.getType.toString,
-      currentState = job.getCurrentState.toString
+      currentState = job.getCurrentState.toString,
+      createTime = createTime
     )
   }
 }

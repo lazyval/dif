@@ -21,7 +21,7 @@ open class Sandbox(resourceDir: String) extends Api {
   override def listJobs(): Try[List[JobSummary]] = {
     try {
       val jobs = readJobs().map { job =>
-        JobSummary(job.id, job.name, job.`type`, job.currentState, job.projectId)
+        JobSummary(job.id, job.name, job.`type`, job.currentState, job.createTime, job.projectId)
       }
       Success(jobs)
     } catch {

@@ -9,7 +9,7 @@ import scala.util.{Failure, Success, Try}
 class SandboxSpec extends AnyFlatSpec with Matchers with TryValues {
   "sandbox" should "parse files from the local resource dif" in {
     val result: Try[List[JobSummary]] = Sandbox.FromResources.listJobs()
-    result.success.value should have size (5)
+    result.success.value should have size (6)
   }
 
   it should "find the job by id" in {
