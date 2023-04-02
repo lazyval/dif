@@ -5,36 +5,28 @@ import org.jline.reader.impl.*
 import org.jline.reader.impl.completer.{AggregateCompleter, ArgumentCompleter, StringsCompleter}
 import org.jline.terminal.*
 import org.jline.terminal.impl.*
-import space.kostya.dif.format.ColorfulTree
+import space.kostya.dif.format.{ColorfulTree, HumanDates}
 import space.kostya.dif.model.JobDescription
 import space.kostya.dif.model.JobSummary
 import space.kostya.dif.comp.Op
 
+import java.time.LocalDateTime
 import scala.util.{Failure, Success}
 
 object Cli {
+  val ListCommand: String    = "list"
+  val CompareCommand: String = "compare"
+
   def main(args: Array[String]): Unit = {
     val terminal: Terminal = TerminalBuilder.builder().system(true).build()
 
-    val listCommand: String    = "list"
-    val compareCommand: String = "compare"
-
-    val jobCompletions = Sandbox.FromResources.listJobs().get.map { summary =>
-      val description = s"${summary.name} ${summary.currentState}"
-      new Candidate(summary.id, summary.id, summary.projectId, description, null, null, true)
-    }
-
-    val completer: Completer = new StringsCompleter(listCommand, compareCommand)
-    val compareCompleter: Completer = new ArgumentCompleter(
-      new StringsCompleter(compareCommand),
-      new StringsCompleter(jobCompletions: _*),
-      new StringsCompleter(jobCompletions: _*)
-    )
+    val compareCompleter: Completer = comparisonCompleter(Sandbox.FromResources)
+    val listCompleter: Completer    = new ArgumentCompleter(new StringsCompleter(ListCommand))
 
     val reader: LineReader = LineReaderBuilder
       .builder()
       .terminal(terminal)
-      .completer(new AggregateCompleter(completer, compareCompleter))
+      .completer(new AggregateCompleter(listCompleter, compareCompleter))
       .build()
 
     while (true) {
@@ -49,12 +41,12 @@ object Cli {
         println("Please enter a command")
       } else {
         tokens(0) match {
-          case `listCommand` =>
+          case ListCommand =>
             Sandbox.FromResources.listJobs() match {
               case Failure(error) => println(s"Error: $error")
               case Success(jobs)  => jobs.foreach(println)
             }
-          case `compareCommand` =>
+          case CompareCommand =>
             if (tokens.length < 3) {
               println("Please enter two jobs to compare")
             } else {
@@ -85,5 +77,36 @@ object Cli {
           render.foreach(println)
         }
     }
+  }
+
+  private def comparisonCompleter(api: Api): Completer = {
+    // TODO string completer eats the order, so sorting candidates won't help
+    // what would help is to implement a custom completer
+    val listJobs = api
+      .listJobs()
+      .getOrElse(List.empty)
+
+    val jobCompletions = listJobs.map { summary =>
+      val now = LocalDateTime.now()
+      require(
+        now.isAfter(summary.createTime),
+        s"Job create time (${summary.createTime} is in the future"
+      )
+      val state = summary.currentState match
+        case "JOB_STATE_DONE"      => "✅"
+        case "JOB_STATE_FAILED"    => "❌"
+        case "JOB_STATE_CANCELLED" => "🚫"
+        case "JOB_STATE_RUNNING"   => "⏳"
+        case _                     => "❓"
+      val when        = HumanDates.approxDifference(earlier = summary.createTime, later = now)
+      val description = s"$when ago ${summary.name} $state"
+      new Candidate(summary.id, summary.id, null, description, null, null, true)
+    }
+
+    new ArgumentCompleter(
+      new StringsCompleter(CompareCommand),
+      new StringsCompleter(jobCompletions: _*),
+      new StringsCompleter(jobCompletions: _*)
+    )
   }
 }
