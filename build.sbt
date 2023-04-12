@@ -5,6 +5,7 @@ val ScalaTestVersion = "3.2.15"
 lazy val root = project
   .in(file("."))
   .enablePlugins(ScoverageSbtPlugin)
+  .enablePlugins(NativeImagePlugin)
   .settings(
     name         := "dif",
     version      := "0.1.0-SNAPSHOT",
@@ -21,6 +22,11 @@ lazy val root = project
       // "com.spotify"     %% "magnolify-scalacheck"  % "0.22.0",
       "org.gnieh"      %% "diffson-circe" % "4.4.0",
       "org.jline"        % "jline"        % "3.23.0",
+      "com.typesafe.scala-logging" %% "scala-logging" % "3.9.5",
+      "ch.qos.logback" % "logback-classic" % "1.4.6",
       "org.scalacheck" %% "scalacheck"    % "1.17.0" % Test
-    )
+    ),
+    nativeImageVersion  := "22.3.1",
+    // https://www.graalvm.org/22.1/reference-manual/native-image/Resources/
+    nativeImageOptions += "-H:IncludeResources=\".*/job_description.*json$\""
   )
