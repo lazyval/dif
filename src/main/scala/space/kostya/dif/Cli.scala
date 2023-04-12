@@ -9,11 +9,12 @@ import space.kostya.dif.format.{ColorfulTree, HumanDates}
 import space.kostya.dif.model.JobDescription
 import space.kostya.dif.model.JobSummary
 import space.kostya.dif.comp.Op
+import com.typesafe.scalalogging.LazyLogging
 
 import java.time.LocalDateTime
 import scala.util.{Failure, Success}
 
-object Cli {
+object Cli extends LazyLogging {
   val ListCommand: String    = "list"
   val CompareCommand: String = "compare"
 

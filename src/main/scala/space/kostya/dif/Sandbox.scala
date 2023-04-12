@@ -10,9 +10,10 @@ import java.nio.file.Files
 import java.time.{LocalDateTime, OffsetDateTime}
 import java.time.format.DateTimeFormatter
 import scala.util.{Failure, Success, Try}
+import com.typesafe.scalalogging.LazyLogging
 import scala.jdk.CollectionConverters.*
 
-open class Sandbox(resourceDir: String) extends Api {
+open class Sandbox(resourceDir: String) extends Api with LazyLogging {
   given Decoder[LocalDateTime] = Decoder.decodeString.emapTry { str =>
     // dataflow time is decoded with 'Z' in the end => OffsetDateTime
     Try(OffsetDateTime.parse(str).toLocalDateTime)
@@ -23,9 +24,12 @@ open class Sandbox(resourceDir: String) extends Api {
       val jobs = readJobs().map { job =>
         JobSummary(job.id, job.name, job.`type`, job.currentState, job.createTime, job.projectId)
       }
+      logger.trace(s"Successfully read ${jobs.size} jobs from $resourceDir")
       Success(jobs)
     } catch {
-      case ex: Exception => Failure(ex)
+      case ex: Exception =>
+        logger.error(s"Failed to read jobs from $resourceDir", ex)
+        Failure(ex)
     }
   }
 
@@ -77,9 +81,7 @@ open class Sandbox(resourceDir: String) extends Api {
       }
     }
   }
-
 }
 object Sandbox {
-//  val Default = new Sandbox("src/main/resources")
   val FromResources = new Sandbox("json_sandbox")
 }
