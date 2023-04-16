@@ -1,0 +1,18 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"properties": {
+        "id": { "type": "string" },
+        "projectId": { "type": "string" },
+        "name": { "type": "string" },
+        "type": { "type": "string" },
+        "environment": { "type": "object" },
+        "steps": { "type": "array" },
+        "currentState": { "type": "string" },
+        "currentStateTime": { "type": "string" },
+        "location": { "type": "string" },
+        "pipelineDescription": { "type": "object" },
+        "stateStages": { "type": "object" },
+        "jobMetadata": { "type": "object" },
+        "startTime": { "type": "string" }
+    }
+}
