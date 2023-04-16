@@ -11,7 +11,7 @@ lazy val root = project
     version      := "0.1.0-SNAPSHOT",
     scalaVersion := scala3Version,
     libraryDependencies ++= Seq(
-      "com.google.cloud" % "google-cloud-dataflow" % "0.18.0",
+      "com.google.cloud" % "google-cloud-dataflow" % "0.19.0",
       "io.circe"        %% "circe-core"            % CirceVersion,
       "io.circe"        %% "circe-generic"         % CirceVersion,
       "io.circe"        %% "circe-parser"          % CirceVersion,
@@ -20,13 +20,13 @@ lazy val root = project
       // scalacheck magnolify can be used for automatic derivation of arbitrary instances
       // but sadly it doesn't work with scala 3 yet, see https://github.com/spotify/magnolify/pull/676
       // "com.spotify"     %% "magnolify-scalacheck"  % "0.22.0",
-      "org.gnieh"      %% "diffson-circe" % "4.4.0",
-      "org.jline"        % "jline"        % "3.23.0",
-      "com.typesafe.scala-logging" %% "scala-logging" % "3.9.5",
-      "ch.qos.logback" % "logback-classic" % "1.4.6",
-      "org.scalacheck" %% "scalacheck"    % "1.17.0" % Test
+      "org.gnieh"                  %% "diffson-circe"   % "4.4.0",
+      "org.jline"                   % "jline"           % "3.23.0",
+      "com.typesafe.scala-logging" %% "scala-logging"   % "3.9.5",
+      "ch.qos.logback"              % "logback-classic" % "1.4.6",
+      "org.scalacheck"             %% "scalacheck"      % "1.17.0" % Test
     ),
-    nativeImageVersion  := "22.3.1",
+    nativeImageVersion := "22.3.1",
     // https://www.graalvm.org/22.1/reference-manual/native-image/Resources/
     nativeImageOptions += "-H:IncludeResources=\".*/job_description.*json$\""
   )
