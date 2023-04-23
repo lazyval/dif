@@ -23,7 +23,7 @@ lazy val root = project
       "org.gnieh"                  %% "diffson-circe"   % "4.4.0",
       "org.jline"                   % "jline"           % "3.23.0",
       "com.typesafe.scala-logging" %% "scala-logging"   % "3.9.5",
-      "ch.qos.logback"              % "logback-classic" % "1.4.6",
+      "ch.qos.logback"              % "logback-classic" % "1.4.7",
       "org.scalacheck"             %% "scalacheck"      % "1.17.0" % Test
     ),
     nativeImageVersion := "22.3.1",
