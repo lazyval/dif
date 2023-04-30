@@ -14,5 +14,20 @@
         "stateStages": { "type": "object" },
         "jobMetadata": { "type": "object" },
         "startTime": { "type": "string" }
-    }
+    },
+    "required": [
+        "id",
+        "projectId",
+        "name",
+        "type",
+        "environment",
+        "steps",
+        "currentState",
+        "currentStateTime",
+        "location",
+        "pipelineDescription",
+        "stateStages",
+        "jobMetadata",
+        "startTime"
+    ]
 }

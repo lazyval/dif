@@ -9,7 +9,6 @@ trait ValidatingParser {
   def parse(rawString: String): Validated[Exception, Json]
 }
 
-@deprecated("see unit test", "0.1.0")
 object SkemaValidation extends ValidatingParser {
 
   val rawSchema = {
