@@ -60,6 +60,6 @@ object Trie {
   case object Empty extends Trie {
     override val token: String = "/"
   }
-  case class Leaf(token: String, value: DiffOp)            extends Trie
+  case class Leaf(token: String, value: DiffOp)        extends Trie
   case class Node(token: String, children: List[Trie]) extends Trie
 }
