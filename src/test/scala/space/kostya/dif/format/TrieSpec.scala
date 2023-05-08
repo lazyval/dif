@@ -2,7 +2,7 @@ package space.kostya.dif.format
 
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
-import space.kostya.dif.comp.Replace
+import space.kostya.dif.json.Replace
 import space.kostya.dif.format.Trie.{Node, Empty, Leaf}
 
 class TrieSpec extends AnyFlatSpec with Matchers {

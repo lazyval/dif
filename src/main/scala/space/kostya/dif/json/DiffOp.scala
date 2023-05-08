@@ -1,18 +1,18 @@
-package space.kostya.dif.comp
+package space.kostya.dif.json
 
 import io.circe.{Decoder, Json}
 import io.circe.generic.semiauto.deriveDecoder
 
 // operations from https://tools.ietf.org/html/rfc6902
 // slimmer version of diffson operations
-sealed trait Op { def path: String }
-case class Replace(path: String, value: String, old: String) extends Op
-case class Add(path: String, value: String)                  extends Op
-case class Remove(path: String, old: String)                 extends Op
-case class Move(from: String, path: String)                  extends Op
-case class Copy(from: String, path: String)                  extends Op
-case class Test(path: String, value: Json)                   extends Op
-given diffsonConversion: Conversion[diffson.jsonpatch.Operation[Json], Op] = {
+sealed trait DiffOp { def path: String }
+case class Replace(path: String, value: String, old: String) extends DiffOp
+case class Add(path: String, value: String)                  extends DiffOp
+case class Remove(path: String, old: String)                 extends DiffOp
+case class Move(from: String, path: String)                  extends DiffOp
+case class Copy(from: String, path: String)                  extends DiffOp
+case class Test(path: String, value: Json)                   extends DiffOp
+given diffsonConversion: Conversion[diffson.jsonpatch.Operation[Json], DiffOp] = {
   case diffson.jsonpatch.Replace(path, value, old) =>
     val original = old.map(_.toString).getOrElse("")
     Replace(path.toString, value.toString, original)
@@ -25,7 +25,7 @@ given diffsonConversion: Conversion[diffson.jsonpatch.Operation[Json], Op] = {
   case diffson.jsonpatch.Test(path, value) => Test(path.toString, value)
 }
 
-given opDecoder: Decoder[Op] = (c: io.circe.HCursor) => {
+given opDecoder: Decoder[DiffOp] = (c: io.circe.HCursor) => {
   val op = c.downField("op").as[String].getOrElse("")
   op match {
     case "replace" => c.as[Replace]
