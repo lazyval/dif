@@ -10,6 +10,7 @@ lazy val root = project
     name         := "dif",
     version      := "0.1.0-SNAPSHOT",
     scalaVersion := scala3Version,
+    doctestTestFramework := DoctestTestFramework.ScalaTest,
     libraryDependencies ++= Seq(
       "com.google.cloud" % "google-cloud-dataflow" % "0.20.0",
       "io.circe"        %% "circe-core"            % CirceVersion,
