@@ -1,8 +1,8 @@
 package space.kostya.dif
-import io.circe.Decoder.Result
-import io.circe.DecodingFailure.Reason.CustomReason
-import io.circe.{Decoder, DecodingFailure, HCursor}
+
 import space.kostya.dif.model.{JobDescription, JobSummary}
+import space.kostya.dif.json.Parser
+import io.circe.DecodingFailure.Reason.CustomReason
 
 import java.io.FileNotFoundException
 import java.nio.file.Path
@@ -14,11 +14,6 @@ import com.typesafe.scalalogging.LazyLogging
 import scala.jdk.CollectionConverters.*
 
 open class Sandbox(resourceDir: String) extends Api with LazyLogging {
-  given Decoder[LocalDateTime] = Decoder.decodeString.emapTry { str =>
-    // dataflow time is decoded with 'Z' in the end => OffsetDateTime
-    Try(OffsetDateTime.parse(str).toLocalDateTime)
-  }
-
   override def listJobs(): Try[List[JobSummary]] = {
     try {
       val jobs = readJobs().map { job =>
@@ -65,23 +60,22 @@ open class Sandbox(resourceDir: String) extends Api with LazyLogging {
 
   @throws[io.circe.DecodingFailure]("if job json is invalid")
   @throws[FileNotFoundException]("when directory is located, but individual file is not")
-  @throws[RuntimeException](s"if files cannot be located at $resourceDir")
-  private def readJobs(): List[JobDescription] = {
+  private def readJobs(): List[JobDescription] = try {
     resources(prefix = "job_description_").flatMap { path =>
-      val json = Files.lines(path).iterator().asScala.mkString
-      import io.circe.generic.auto._
-      import io.circe.parser._
-
-      decode[JobDescription](json) match {
-        case Left(ex: DecodingFailure) =>
-          val msg = s"Failed to decode $path, original cause is ${ex.reason}"
-          throw ex.withReason(CustomReason(msg))
-        case Left(ex)   => throw ex
-        case Right(job) => List(job)
-      }
+      val json        = Files.lines(path).iterator().asScala.mkString
+      val maybeParsed = Parser.readDescription(rawJson = json)
+      maybeParsed.recoverWith { case ex: io.circe.DecodingFailure =>
+        val msg = s"Failed to parse job description from $path"
+        throw ex.withReason(reason = CustomReason(msg))
+      }.toOption
     }
+  } catch {
+    case ex: FileNotFoundException =>
+      val msg = s"Failed to locate job description files at $resourceDir"
+      throw new RuntimeException(msg, ex)
   }
 }
+
 object Sandbox {
   val FromResources = new Sandbox("json_sandbox")
 }

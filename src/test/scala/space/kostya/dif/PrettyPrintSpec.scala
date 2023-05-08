@@ -2,7 +2,7 @@ package space.kostya.dif
 
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
-import space.kostya.dif.comp.{Remove, Replace, Add}
+import space.kostya.dif.json.{Remove, Replace, Add}
 import space.kostya.dif.format.ColorfulTree
 import space.kostya.dif.format.PlainText
 

@@ -8,7 +8,7 @@ import org.jline.terminal.impl.*
 import space.kostya.dif.format.{ColorfulTree, HumanDates}
 import space.kostya.dif.model.JobDescription
 import space.kostya.dif.model.JobSummary
-import space.kostya.dif.comp.Op
+import space.kostya.dif.json.DiffOp
 import com.typesafe.scalalogging.LazyLogging
 
 import java.time.LocalDateTime
@@ -71,7 +71,7 @@ object Cli extends LazyLogging {
           j1 <- job1
           j2 <- job2
         } yield {
-          val diff: List[Op] = Differ.jobSummaryComparison.vs(j2, j1)
+          val diff: List[DiffOp] = Differ.jobSummaryComparison.vs(j2, j1)
 
           val render = new ColorfulTree(noColor = false)
             .format(jobId1, jobId2, diff)

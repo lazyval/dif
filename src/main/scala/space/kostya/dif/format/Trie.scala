@@ -2,7 +2,7 @@ package space.kostya.dif.format
 
 import scala.annotation.tailrec
 import scala.collection.immutable.List
-import space.kostya.dif.comp.Op
+import space.kostya.dif.json.DiffOp
 
 sealed trait Trie {
   def token: String
@@ -11,7 +11,7 @@ sealed trait Trie {
 object Trie {
   def empty: Trie = Empty
 
-  def fromPath(path: String, op: Op): Trie = {
+  def fromPath(path: String, op: DiffOp): Trie = {
     val tokens = path.drop(1).split("/")
 
     tokens.foldRight(Trie.empty) {
@@ -60,6 +60,6 @@ object Trie {
   case object Empty extends Trie {
     override val token: String = "/"
   }
-  case class Leaf(token: String, value: Op)            extends Trie
+  case class Leaf(token: String, value: DiffOp)        extends Trie
   case class Node(token: String, children: List[Trie]) extends Trie
 }

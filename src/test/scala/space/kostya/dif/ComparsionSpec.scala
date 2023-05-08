@@ -5,7 +5,7 @@ import org.scalacheck.Arbitrary
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 import space.kostya.dif.model.JobSummary
-import space.kostya.dif.comp.*
+import space.kostya.dif.json.*
 import java.time.LocalDateTime
 
 class ComparsionSpec extends AnyFlatSpec with Matchers {
