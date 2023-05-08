@@ -1,9 +1,10 @@
-package space.kostya.dif
+package space.kostya.dif.json
 
 import cats.data.Validated
 import cats.data.Validated.{Invalid, Valid}
-import com.github.erosb.jsonsKema.{JsonParser, JsonValue, SchemaLoader, ValidationFailure, Validator}
+import com.github.erosb.jsonsKema.*
 import io.circe.Json
+import space.kostya.dif.ValidatingParser
 
 trait ValidatingParser {
   def parse(rawString: String): Validated[Exception, Json]
@@ -31,7 +32,6 @@ object SkemaValidation extends ValidatingParser {
     val circeJson = io.circe.parser.parse(rawJson)
 
     val failure: ValidationFailure = validator.validate(skemaJson)
-    println(s"failure = $failure")
     if (failure == null) Valid(circeJson.right.get)
     else Invalid(new Exception(failure.toString))
   }
