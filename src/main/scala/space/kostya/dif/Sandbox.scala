@@ -39,7 +39,37 @@ open class Sandbox(resourceDir: String) extends Api with LazyLogging {
     }
   }
 
-  private def resources(prefix: String): List[Path] = {
+  @throws[io.circe.DecodingFailure]("if job json is invalid")
+  @throws[FileNotFoundException]("when directory is located, but individual file is not")
+  private def readJobs(): List[JobDescription] = try {
+    jsons(prefix = "job_description_").flatMap { path =>
+      val json        = Files.lines(path).iterator().asScala.mkString
+      val maybeParsed = Parser.readDescription(rawJson = json)
+      maybeParsed.recoverWith { case ex: io.circe.DecodingFailure =>
+        val msg = s"Failed to parse job description from $path"
+        throw ex.withReason(reason = CustomReason(msg))
+      }.toOption
+    }
+  } catch {
+    case ex: FileNotFoundException =>
+      val msg = s"Failed to locate job description files at $resourceDir"
+      throw new RuntimeException(msg, ex)
+  }
+
+  /** Paths of JSONs matching a prefix, or nothing if no match in resource dir
+    *
+    * {{{
+    * scala> Sandbox.FromResources.jsons(prefix="job_desc").size
+    * res1: Int = 6
+    *
+    * scala> Sandbox.FromResources.jsons(prefix="job_description_1").size
+    * res2: Int = 1
+    *
+    * scala> Sandbox.FromResources.jsons(prefix="jb").size
+    * res3: Int = 0
+    * }}}
+    */
+  def jsons(prefix: String): List[Path] = {
     val uri = getClass.getClassLoader.getResource(resourceDir).toURI
     val path = if (uri.getScheme.equals("jar")) {
       val fs =
@@ -56,23 +86,6 @@ open class Sandbox(resourceDir: String) extends Api with LazyLogging {
     val iterator = Files.walk(path).iterator().asScala
     val jsons    = iterator.filter(_.getFileName.toString.endsWith(".json"))
     jsons.filter(_.getFileName.toString.startsWith(prefix)).toList
-  }
-
-  @throws[io.circe.DecodingFailure]("if job json is invalid")
-  @throws[FileNotFoundException]("when directory is located, but individual file is not")
-  private def readJobs(): List[JobDescription] = try {
-    resources(prefix = "job_description_").flatMap { path =>
-      val json        = Files.lines(path).iterator().asScala.mkString
-      val maybeParsed = Parser.readDescription(rawJson = json)
-      maybeParsed.recoverWith { case ex: io.circe.DecodingFailure =>
-        val msg = s"Failed to parse job description from $path"
-        throw ex.withReason(reason = CustomReason(msg))
-      }.toOption
-    }
-  } catch {
-    case ex: FileNotFoundException =>
-      val msg = s"Failed to locate job description files at $resourceDir"
-      throw new RuntimeException(msg, ex)
   }
 }
 
