@@ -7,12 +7,12 @@ lazy val root = project
   .enablePlugins(ScoverageSbtPlugin)
   .enablePlugins(NativeImagePlugin)
   .settings(
-    name         := "dif",
-    version      := "0.1.0-SNAPSHOT",
-    scalaVersion := scala3Version,
+    name                 := "dif",
+    version              := "0.1.0-SNAPSHOT",
+    scalaVersion         := scala3Version,
     doctestTestFramework := DoctestTestFramework.ScalaTest,
     libraryDependencies ++= Seq(
-      "com.google.cloud" % "google-cloud-dataflow" % "0.20.0",
+      "com.google.cloud" % "google-cloud-dataflow" % "0.21.0",
       "io.circe"        %% "circe-core"            % CirceVersion,
       "io.circe"        %% "circe-generic"         % CirceVersion,
       "io.circe"        %% "circe-parser"          % CirceVersion,
