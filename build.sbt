@@ -25,7 +25,8 @@ lazy val root = project
       "org.jline"                   % "jline"           % "3.23.0",
       "com.typesafe.scala-logging" %% "scala-logging"   % "3.9.5",
       "ch.qos.logback"              % "logback-classic" % "1.4.7",
-      "org.scalacheck"             %% "scalacheck"      % "1.17.0" % Test
+      "org.scalacheck"             %% "scalacheck"      % "1.17.0" % Test,
+      "com.github.erosb"            % "json-sKema"      % "0.6.0"
     ),
     nativeImageVersion := "22.3.1",
     // https://www.graalvm.org/22.1/reference-manual/native-image/Resources/
