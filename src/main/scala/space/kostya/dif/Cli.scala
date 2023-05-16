@@ -12,7 +12,7 @@ import space.kostya.dif.json.DiffOp
 import com.typesafe.scalalogging.LazyLogging
 
 import java.time.LocalDateTime
-import scala.util.{Failure, Success}
+import scala.util.{Failure, Success, Try}
 
 object Cli extends LazyLogging {
   val ListCommand: String    = "list"
@@ -61,22 +61,23 @@ object Cli extends LazyLogging {
   }
 
   private def runComparison(jobId1: String, jobId2: String): Unit = {
-    Sandbox.FromResources.listJobs() match {
-      case Failure(error) => println(s"Error: $error")
-      case Success(summaries) =>
-        val job1 = summaries.find(_.id == jobId1)
-        val job2 = summaries.find(_.id == jobId2)
+    val api: Api = Sandbox.FromResources
+    val job1 = api.describeJob(jobId1)
+    val job2 = api.describeJob(jobId2)
 
-        for {
-          j1 <- job1
-          j2 <- job2
-        } yield {
-          val diff: List[DiffOp] = Differ.jobSummaryComparison.vs(j2, j1)
+    val deltaOutput: Try[List[String]] = for {
+      j1 <- job1
+      j2 <- job2
+    } yield {
+      val diff: List[DiffOp] = Differ.jobDescriptionComparison.vs(j2, j1)
 
-          val render = new ColorfulTree(noColor = false)
-            .format(jobId1, jobId2, diff)
-          render.foreach(println)
-        }
+      new ColorfulTree(noColor = false)
+        .format(jobId1, jobId2, diff)
+    }
+
+    deltaOutput match {
+      case Success(lines) => lines.foreach(println)
+      case Failure(ex) => println(s"Failed to compare $jobId1 with $jobId2 because of $ex")
     }
   }
 

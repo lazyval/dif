@@ -45,4 +45,27 @@ object Differ {
       }
     }
   }
+
+  given jobDescriptionComparison: Comparison[JobDescription] = new Comparison[JobDescription] {
+
+    def vs(x: JobDescription, y: JobDescription): List[DiffOp] = {
+      import io.circe.syntax._
+      import io.circe.generic.auto._
+      import io.circe.generic.semiauto._
+
+      val xJson: io.circe.Json = x.asJson
+      val yJson: io.circe.Json = y.asJson
+
+      // use diffson-circe to convert the diff right away
+      // then consume the result as Dif classes
+      // it's an extra copy, but helps to avoid dealing with internal diffson types
+      val originalDiff = circeDiffer.diff(xJson, yJson).asJson
+      // import to shadow circe auto / semiauto decoders
+      import space.kostya.dif.json.opDecoder
+      originalDiff.as[List[DiffOp]] match {
+        case Right(ops) => ops
+        case Left(err) => throw new Exception(err.message)
+      }
+    }
+  }
 }

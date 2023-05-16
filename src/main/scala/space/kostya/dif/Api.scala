@@ -8,5 +8,4 @@ trait Api {
   // for now, return a list, but it's really an infinite iterator, which might take filters
   def listJobs(): Try[List[JobSummary]]
   def describeJob(jobId: String): Try[JobDescription]
-
 }
