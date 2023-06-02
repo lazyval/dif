@@ -12,7 +12,7 @@ lazy val root = project
     scalaVersion         := scala3Version,
     doctestTestFramework := DoctestTestFramework.ScalaTest,
     libraryDependencies ++= Seq(
-      "com.google.cloud" % "google-cloud-dataflow" % "0.21.0",
+      "com.google.cloud" % "google-cloud-dataflow" % "0.22.0",
       "io.circe"        %% "circe-core"            % CirceVersion,
       "io.circe"        %% "circe-generic"         % CirceVersion,
       "io.circe"        %% "circe-parser"          % CirceVersion,
