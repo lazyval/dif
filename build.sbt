@@ -1,4 +1,4 @@
-val scala3Version    = "3.2.2"
+val scala3Version    = "3.3.0"
 val CirceVersion     = "0.14.5"
 val ScalaTestVersion = "3.2.16"
 
