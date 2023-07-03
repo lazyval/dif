@@ -12,7 +12,7 @@ lazy val root = project
     scalaVersion         := scala3Version,
     doctestTestFramework := DoctestTestFramework.ScalaTest,
     libraryDependencies ++= Seq(
-      "com.google.cloud" % "google-cloud-dataflow" % "0.23.0",
+      "com.google.cloud" % "google-cloud-dataflow" % "0.24.0",
       "io.circe"        %% "circe-core"            % CirceVersion,
       "io.circe"        %% "circe-generic"         % CirceVersion,
       "io.circe"        %% "circe-parser"          % CirceVersion,
@@ -26,7 +26,7 @@ lazy val root = project
       "com.typesafe.scala-logging" %% "scala-logging"   % "3.9.5",
       "ch.qos.logback"              % "logback-classic" % "1.4.8",
       "org.scalacheck"             %% "scalacheck"      % "1.17.0" % Test,
-      "com.github.erosb"            % "json-sKema"      % "0.7.0"
+      "com.github.erosb"            % "json-sKema"      % "0.8.0"
     ),
     nativeImageVersion := "22.3.1",
     // https://www.graalvm.org/22.1/reference-manual/native-image/Resources/
