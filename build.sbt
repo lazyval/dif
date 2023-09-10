@@ -24,7 +24,7 @@ lazy val root = project
       "org.gnieh"                  %% "diffson-circe"   % "4.4.0",
       "org.jline"                   % "jline"           % "3.23.0",
       "com.typesafe.scala-logging" %% "scala-logging"   % "3.9.5",
-      "ch.qos.logback"              % "logback-classic" % "1.4.8",
+      "ch.qos.logback"              % "logback-classic" % "1.4.11",
       "org.scalacheck"             %% "scalacheck"      % "1.17.0" % Test,
       "com.github.erosb"            % "json-sKema"      % "0.8.0"
     ),
